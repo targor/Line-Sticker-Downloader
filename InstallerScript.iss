@@ -33,12 +33,12 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-Source: "LineStickerDownloader\LineStickerDownloader\bin\Release\net472\LineStickerDownloader.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "LineStickerDownloader\LineStickerDownloader\bin\Release\net472\Lib\*"; DestDir: "{app}\Lib"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "LineStickerDownloader\LineStickerDownloader\bin\Release\net472\LineStickerDownloader.exe.config"; DestDir: "{app}"; Flags: ignoreversion
-Source: "LineStickerDownloader\LineStickerDownloader\bin\Release\net472\Microsoft.Expression.Interactions.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "LineStickerDownloader\LineStickerDownloader\bin\Release\net472\Newtonsoft.Json.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "LineStickerDownloader\LineStickerDownloader\bin\Release\net472\System.Drawing.Common.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "LineStickerDownloader\bin\x64\Release\net472\LineStickerDownloader.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "LineStickerDownloader\bin\x64\Release\net472\Lib\*"; DestDir: "{app}\Lib"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "LineStickerDownloader\bin\x64\Release\net472\LineStickerDownloader.exe.config"; DestDir: "{app}"; Flags: ignoreversion
+Source: "LineStickerDownloader\bin\x64\Release\net472\Microsoft.Expression.Interactions.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "LineStickerDownloader\bin\x64\Release\net472\Newtonsoft.Json.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "LineStickerDownloader\bin\x64\Release\net472\System.Drawing.Common.dll"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
