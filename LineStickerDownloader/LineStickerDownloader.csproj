@@ -1,0 +1,76 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net472</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <StartupObject>LineStickerDownloader.App</StartupObject>
+    <Platforms>AnyCPU;x64</Platforms>
+    <DebugType>embedded</DebugType>
+    <SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
+    <ApplicationIcon>Resources\Images\cloud-download.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\Images\caret-down.png" />
+    <None Remove="Resources\Images\caret-up.png" />
+    <None Remove="Resources\Images\close.png" />
+    <None Remove="Resources\Images\cloud-download.png" />
+    <None Remove="Resources\Images\cog.png" />
+    <None Remove="Resources\Images\download-solid.png" />
+    <None Remove="Resources\Images\download.png" />
+    <None Remove="Resources\Images\folder-open-o.png" />
+    <None Remove="Resources\Images\window-minimize.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\Images\cloud-download.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MicrosoftExpressionInteractions" Version="3.0.40218" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Images\caret-down.png" />
+    <Resource Include="Resources\Images\caret-up.png" />
+    <Resource Include="Resources\Images\close.png">
+      <CopyToOutputDirectory></CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\cloud-download.png">
+      <CopyToOutputDirectory></CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\cog.png">
+      <CopyToOutputDirectory></CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\folder-open-o.png" />
+    <Resource Include="Resources\Images\window-minimize.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Lib\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Net.Http" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Lib\apng2GifManaged.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

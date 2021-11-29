@@ -1,0 +1,518 @@
+﻿<Window x:Class="LineStickerDownloader.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LineStickerDownloader"
+        xmlns:models="clr-namespace:LineStickerDownloader.Models"
+        xmlns:converter="clr-namespace:LineStickerDownloader.Converter"
+        mc:Ignorable="d"
+        Title="Line-Sticker-Downloader" Height="900" Width="1200"
+        Background="#424242"
+        MaxWidth="1200"
+        MaxHeight="900"
+        MinHeight="600"
+        MinWidth="1000"
+        ResizeMode="CanResizeWithGrip"
+        WindowStyle="None"
+        WindowState="{Binding CurWindowState, Mode=TwoWay}"
+        Icon="pack://application:,,,/LineStickerDownloader;component/Resources/Images/cloud-download.png"
+        Style="{StaticResource CustomWindowStyle}"
+        >
+        <WindowChrome.WindowChrome>
+            <WindowChrome CaptionHeight="32" ResizeBorderThickness="{x:Static SystemParameters.WindowResizeBorderThickness}" />
+        </WindowChrome.WindowChrome>
+
+        <Control.DataContext>
+            <models:MainViewModel/>
+        </Control.DataContext>
+    
+        <Window.Resources>
+        <converter:BooleanToColorConverter x:Key="BooleanToColorConverter"/>
+    </Window.Resources>
+        <Grid>
+            <Border>
+            <Border.Effect>
+                <BlurEffect Radius="{Binding MultiBlur}" KernelType="Box" />
+            </Border.Effect>
+            <Grid>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- collection list -->
+                    <Grid Grid.Row="0">
+                        <ListView ItemsSource="{Binding PageImageList}" 
+                                      ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                                      HorizontalAlignment="Stretch" 
+                                      VerticalAlignment="Stretch"
+                                      Background="#424242"
+                                      BorderThickness="0"
+                                      ItemContainerStyle="{StaticResource ContainerStyle}"
+                                      >
+                            <ListView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel HorizontalAlignment="Center" Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ListView.ItemsPanel>
+
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Width="150" MinHeight="180" Margin="8" Background="#212121" BorderBrush="#212121" BorderThickness="1" CornerRadius="8" Padding="3">
+                                        <Border.Effect>
+                                            <DropShadowEffect BlurRadius="5" Opacity="0.6"/>
+                                        </Border.Effect>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition MinHeight="30" Height="auto"/>
+                                                <RowDefinition Height="*"/>
+                                                <RowDefinition Height="auto"/>
+                                            </Grid.RowDefinitions>
+
+                                            <Grid Grid.Row="0" Grid.ColumnSpan="2">
+                                                <Border Grid.Column="0" BorderBrush="Black" BorderThickness="0" CornerRadius="4">
+                                                    <TextBlock Foreground="White" TextWrapping="Wrap" Text="{Binding Path=Name}"></TextBlock>
+                                                </Border>
+                                            </Grid>
+
+                                            <Grid Grid.Row="1">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="30"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Border Grid.Column="0" Width="105" Height="105" BorderBrush="#424242" BorderThickness="1"  Margin="3" Padding="0" CornerRadius="90" >
+                                                    <Border.Background>
+                                                        <ImageBrush Stretch="Fill" ImageSource="{Binding Path=Image}"/>
+                                                    </Border.Background>
+                                                </Border>
+                                                <Border Grid.Column="1" VerticalAlignment="Top" Height="105" Margin="0 0 0 2" BorderBrush="Black" BorderThickness="0" CornerRadius="0">
+                                                    <StackPanel Orientation="Vertical">
+                                                    <Button 
+                                                        BorderThickness="0"
+                                                        Width="20" 
+                                                        Padding="0" 
+                                                        Margin="2" 
+                                                        Height="20" 
+                                                        VerticalAlignment="Top" 
+                                                        Background="Transparent"
+                                                        Command="{Binding Path=DownloadCollectionCommand}"
+                                                        Style="{StaticResource FlatButtonStyleWithSelection}"
+                                                        ToolTip="Download this collection (Downloadpath can be changed in the settings)."
+                                                        >
+                                                        <Image Source="pack://application:,,,/LineStickerDownloader;component/Resources/Images/cloud-download.png"></Image>
+                                                    </Button>
+                                                    <Button 
+                                                        BorderThickness="0"
+                                                        Width="20" 
+                                                        Padding="0" 
+                                                        Margin="2" 
+                                                        Height="20" 
+                                                        VerticalAlignment="Top" 
+                                                        Background="Transparent"
+                                                        Command="{Binding Path=OpenCollectionFolderCommand}"
+                                                        Style="{StaticResource FlatButtonStyleNOSelection}"
+                                                        ToolTip="Opens the folder to this downloaded collection."
+                                                        >
+                                                        <Image Opacity="{Binding Path=OpenFolderOpacity}" Source="pack://application:,,,/LineStickerDownloader;component/Resources/Images/folder-open-o.png"></Image>
+                                                    </Button>
+                                                    </StackPanel>
+                                                </Border>
+                                            </Grid>
+
+                                            <Grid Grid.Row="2" Grid.ColumnSpan="2">
+                                                <Border Grid.Column="0" BorderBrush="Black" BorderThickness="0" CornerRadius="4">
+                                                    <TextBlock TextWrapping="Wrap">
+                                                          <Run Foreground="White" Text="Has animations:"/>
+                                                          <Run Foreground="White" Text="{Binding Path=HasAnimation}"/>
+                                                    </TextBlock>
+                                                </Border>
+                                            </Grid>
+
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Grid>
+                    <Grid Grid.Row="1" Background="#303030"  Height="20" Margin="0 0 0 0"></Grid>
+                    
+                    <!-- Pagination and setingsframe-->
+                    <Grid Grid.Row="0" Background="Transparent" 
+                              VerticalAlignment="Bottom" 
+                              HorizontalAlignment="Stretch"
+                              Height="70"
+                              Margin="0 0 0 -20"
+                              >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <!-- pagination -->
+                        <Border BorderThickness="1" 
+                                    Grid.Column="0"
+                                    BorderBrush="#303030" 
+                                    CornerRadius="4" 
+                                    HorizontalAlignment="Center" 
+                                    VerticalAlignment="Bottom"
+                                    Background="#212121"
+                                    Height="30"
+                                    Padding="5 0 5 0"
+                                    Margin="0 0 0 0"
+                                    >
+                            <ListView HorizontalAlignment="Center" 
+                                          VerticalAlignment="Center"
+                                          ItemsSource="{Binding Pages}" 
+                                          Background="Transparent" 
+                                          BorderThickness="0"  
+                                          Style="{StaticResource ListViewStyle}"
+                                          IsEnabled="{Binding PaginationEnabled}"
+                                          ItemContainerStyle="{StaticResource ContainerStyle}"
+                                          >
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Button 
+                                                Style="{StaticResource FlatButtonStyleWithSelection}"
+                                                Margin="2" 
+                                                Padding="0" 
+                                                Command="{Binding Path=CallPage}" CommandParameter="{Binding}"
+                                                Foreground="{Binding Path=IsSelected,Converter={StaticResource BooleanToColorConverter}}"
+                                                >
+                                            <TextBlock Margin="5 0 5 0" Text="{Binding Path=Value}"/>
+                                        </Button>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+
+                                <ListView.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Horizontal"></StackPanel>
+                                    </ItemsPanelTemplate>
+                                </ListView.ItemsPanel>
+                            </ListView>
+                        </Border>
+
+                        
+                        <!-- Settings Frame -->
+                        <Border
+                            Width="30"
+                            x:Name="SettingsOpener"
+                            Grid.Column="0"
+                            BorderThickness="1" 
+                            BorderBrush="#303030" 
+                            CornerRadius="4" 
+                            HorizontalAlignment="Left" 
+                            VerticalAlignment="Bottom"
+                            Background="#212121"
+                            Height="30"
+                            Padding="5 0 5 0"
+                            Margin="40 0 0 0">
+
+                            <Border.Triggers>
+                                <EventTrigger RoutedEvent="Button.Click" SourceName="OpenSettingsButton">
+                                    <BeginStoryboard Name="BeginStory">
+                                        <Storyboard>
+                                            <DoubleAnimation Duration="0:0:0.1" From="30" Storyboard.TargetName="SettingsOpener" Storyboard.TargetProperty="(Height)" To="55" />
+                                            <DoubleAnimation Duration="0:0:0.2" From="30" Storyboard.TargetName="SettingsOpener" Storyboard.TargetProperty="(Width)" To="263" />
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="SettingsOpener" Storyboard.TargetProperty="Visibility">
+                                                <DiscreteObjectKeyFrame KeyTime="0:0:0.4" Value="{x:Static Visibility.Hidden}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Settings" Storyboard.TargetProperty="Visibility">
+                                                <DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="{x:Static Visibility.Visible}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </Border.Triggers>
+
+                            <StackPanel Orientation="Horizontal">
+
+                                <!-- Open settings -->
+                            <Button 
+                            x:Name="OpenSettingsButton"
+                            Style="{StaticResource FlatButtonStyleNOSelection}"
+                            BorderThickness="0"
+                            Padding="0" 
+                            Margin="0 0 0 0" 
+                            Height="20" 
+                            VerticalAlignment="Center" 
+                            Background="Transparent"
+                            ToolTip="Hide Toolbar" >
+                                    <Image Source="pack://application:,,,/LineStickerDownloader;component/Resources/Images/caret-up.png"></Image>
+                            </Button>
+                            </StackPanel>
+                        </Border>
+                        
+                        <Border
+                            x:Name="Settings"
+                            Visibility="Hidden"
+                            Grid.Column="0"
+                            BorderThickness="1" 
+                            BorderBrush="#303030" 
+                            CornerRadius="4" 
+                            HorizontalAlignment="Left" 
+                            VerticalAlignment="Bottom"
+                            Background="#212121"
+                            Height="55"
+                            Padding="5 0 5 0"
+                            Margin="40 0 0 0">
+
+                            <Border.Triggers>
+                                <EventTrigger RoutedEvent="Button.Click" SourceName="CloseSettingsButton">
+                                    <BeginStoryboard Name="BeginStory2">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Settings" Storyboard.TargetProperty="Visibility">
+                                                <DiscreteObjectKeyFrame KeyTime="0:0:0.1" Value="{x:Static Visibility.Hidden}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="SettingsOpener" Storyboard.TargetProperty="Visibility">
+                                                <DiscreteObjectKeyFrame KeyTime="0:0:0.2" Value="{x:Static Visibility.Visible}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <DoubleAnimation Duration="0:0:0.4" From="263" Storyboard.TargetName="SettingsOpener" Storyboard.TargetProperty="(Width)" To="30" />
+                                            <DoubleAnimation Duration="0:0:0.5" From="55" Storyboard.TargetName="SettingsOpener" Storyboard.TargetProperty="(Height)" To="30" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </Border.Triggers>
+                            
+                            <StackPanel Orientation="Horizontal">
+
+                            <!-- Open settings -->
+                            <Button 
+                            x:Name="CloseSettingsButton"
+                            Style="{StaticResource FlatButtonStyleNOSelection}"
+                            BorderThickness="0"
+                            Width="20" 
+                            Padding="0" 
+                            Margin="0 0 5 0" 
+                            Height="20" 
+                            VerticalAlignment="Center" 
+                            Background="Transparent"
+                            ToolTip="Hide Toolbar" >
+                                <Image Source="pack://application:,,,/LineStickerDownloader;component/Resources/Images/caret-down.png"></Image>
+                            </Button>
+                                
+                            <Button 
+                                Style="{StaticResource FlatButtonStyleNOSelection}"
+                                BorderThickness="0"
+                                Width="20" 
+                                Padding="0" 
+                                Margin="0 0 8 0" 
+                                Height="20" 
+                                VerticalAlignment="Center" 
+                                Background="Transparent"
+                                Command="{Binding ShowSettingsCommand}"
+                                ToolTip="Settings"
+                                >
+                                <Image Source="pack://application:,,,/LineStickerDownloader;component/Resources/Images/cog.png"></Image>
+                            </Button>
+                            
+                            <!-- Download all selections -->
+                            <Button 
+                                Style="{StaticResource FlatButtonStyleNOSelection}"
+                                BorderThickness="0"
+                                Width="20" 
+                                Padding="0" 
+                                Margin="0 0 8 0" 
+                                Height="20" 
+                                VerticalAlignment="Center" 
+                                Background="Transparent"
+                                Opacity="{Binding PaginationEnabledOpacity}"
+                                Command="{Binding DownloadAllCollectionsCommand}"
+                                ToolTip="Download All Collections available"
+                                >
+                                <Image Source="pack://application:,,,/LineStickerDownloader;component/Resources/Images/cloud-download.png"></Image>
+                            </Button>
+
+                            <GroupBox BorderThickness="0.4" VerticalAlignment="Center" FontSize="12" Foreground="White" Margin="0 2 0 10" Padding="-3" Header="Download specific Collection">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBox 
+                                            Grid.Column="0"
+                                            VerticalAlignment="Center" 
+                                            VerticalContentAlignment="Center"
+                                            HorizontalAlignment="Stretch"
+                                            Margin="2 4 2 2" Height="20"  Padding="0" 
+                                            BorderThickness="0.2"
+                                            PreviewMouseDown="TextBox_MouseDown"
+                                            Text="{Binding CollectionNumberTxt}" />
+                                        <Button 
+                                            Grid.Column="1"
+                                            Style="{StaticResource FlatButtonStyleNOSelection}"
+                                            BorderThickness="0"
+                                            Width="20" 
+                                            Padding="0" 
+                                            Margin="0 3 0 0" 
+                                            Height="20" 
+                                            HorizontalAlignment="Right"
+                                            VerticalAlignment="Center" 
+                                            Background="Transparent"
+                                            Command="{Binding DowenloadCollectionNumber}"
+                                            Opacity="{Binding PaginationEnabledOpacity}"
+                                            ToolTip="Download All Collections available"
+                                            >
+                                            <Image Source="pack://application:,,,/LineStickerDownloader;component/Resources/Images/cloud-download.png"></Image>
+                                        </Button>
+                                    </Grid>
+                                </GroupBox>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </Grid>
+
+                <!-- background for messagebox that will block all userinputs -->
+                <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="Black" Opacity="0.6" Visibility="{Binding MultiVisibility}"/>
+
+
+            </Grid>
+        </Border>
+            
+        <!-- Settings view -->
+        <Border Visibility="{Binding Settings.SettingsVisibility}">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="4"></DropShadowEffect>
+            </Border.Effect>
+            <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="100 150 100 150" Background="#303030">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Border BorderBrush="#212121" BorderThickness="0 0 0 2">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Foreground="White" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0" Text="{Binding MessageBox.MessageBoxTitle}"/>
+
+                            <Button Grid.Column="1" 
+                                            HorizontalAlignment="Right" 
+                                            VerticalAlignment="Center" 
+                                            Margin="0 0 2 0" Style="{StaticResource FlatButtonStyleWithSelection}"
+                                            Command="{Binding Settings.HideSettingsCommand}" >
+                                <Image Width="32" Height="32" Source="pack://application:,,,/LineStickerDownloader;component/Resources/Images/close.png"></Image>
+                            </Button>
+                        </Grid>
+                    </Border>
+                </Grid>
+                
+                <Grid Grid.Row="1" Margin="4">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <CheckBox
+                        Grid.Row="0"
+                        Margin="0 3 0 0"
+                        Foreground="White"
+                        ToolTip="Some line stickers (those with animations) use the APNG format, which is partially incompatible. If this checkbox is active, the APNG images will be converted to animated gif images, which offers more compatibility."
+                        ToolTipService.ShowDuration="120"
+                        IsChecked="{Binding Settings.ConvertAPNG}"
+                        >Convert APNG</CheckBox>
+
+                    <CheckBox
+                        Grid.Row="1"
+                        Margin="0 3 0 0"
+                        Foreground="White"
+                        ToolTip="If this checkbox is active, then the collection image is saved in addition to the stickers (in the format 000AAA_Id_main). This is important if you want to use the images e.g. with EWE Sticker on Android or other devices. The main image then serves as a preview image for the collection."
+                        ToolTipService.ShowDuration="120"
+                        IsChecked="{Binding Settings.SaveMainImage}"
+                        >Save Main image</CheckBox>
+
+                    <Grid Grid.Row="2" Margin="-3 3 0 0"
+                          ToolTip="When the stickers are converted to gif animations, this can be used to set the number of animation repetitions. by default the value is set to 10. set 0 for infinite."
+                          >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0" Foreground="White">Gif loopcount</Label>
+                        <TextBox Grid.Column="1" Text="{Binding Settings.GifLoopCount}"  Width="100" HorizontalAlignment="Left" Height="20" PreviewTextInput="TextBox_PreviewTextInput"></TextBox>
+                    </Grid>
+                </Grid>
+
+
+                <Grid Grid.Row="2">
+                    <Button Margin="10" Height="30" Style="{StaticResource RegularFlatButtonStyleWithSelection}" Background="#424242" HorizontalAlignment="Center" Width="180" Content="OK" Command="{Binding Settings.HideSettingsCommand}"/>
+                </Grid>
+            </Grid>
+        </Border>
+            
+        <!-- MessageBox View-->
+        <Border Visibility="{Binding MessageBox.MessageBoxVisibility}">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="4"></DropShadowEffect>
+            </Border.Effect>
+            <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="100 150 100 150" Background="#303030">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Border BorderBrush="#212121" BorderThickness="0 0 0 2">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Foreground="White" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0" Text="{Binding MessageBox.MessageBoxTitle}"/>
+
+                            <Button Grid.Column="1" 
+                                            HorizontalAlignment="Right" 
+                                            VerticalAlignment="Center" 
+                                            Margin="0 0 2 0" Style="{StaticResource FlatButtonStyleWithSelection}"
+                                            Command="{Binding MessageBox.MessageBoxButtonCommand}"
+                                            Visibility="{Binding MessageBox.MessageBoxButtonsVisibility}"
+                                            >
+                                <Image Width="32" Height="32" Source="pack://application:,,,/LineStickerDownloader;component/Resources/Images/close.png"></Image>
+                            </Button>
+                        </Grid>
+                    </Border>
+                </Grid>
+                <Grid Grid.Row="1">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                        <TextBlock 
+                        TextWrapping="Wrap" 
+                        HorizontalAlignment="Stretch" 
+                        VerticalAlignment="Stretch" 
+                        Height="auto"
+                        Margin="20" 
+                        Background="Transparent"
+                        Foreground="White"
+                        FontSize="13"
+                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                        ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                        Padding="5"
+                        Text="{Binding MessageBox.MessageBoxText}"
+                        />
+                    </ScrollViewer>
+                </Grid>
+                <Grid Grid.Row="2">
+                    <ProgressBar Height="20" 
+                                 Visibility="{Binding MessageBox.ProgressVisibility}"
+                                 Value="{Binding MessageBox.ProgressBarValue}" 
+                                 Maximum="{Binding MessageBox.ProgressBarMax}"
+                                 Minimum="{Binding MessageBox.ProgressBarMin}"
+                                 IsIndeterminate="{Binding MessageBox.Intermediate}"
+                                 Margin="10 0 10 20"
+                                 ></ProgressBar>
+                </Grid>
+                <Grid Grid.Row="3">
+                    <Button Margin="10" Height="30" Style="{StaticResource RegularFlatButtonStyleWithSelection}" HorizontalAlignment="Center" Width="180" Visibility="{Binding MessageBox.MessageBoxButtonsVisibility}" Content="{Binding MessageBox.MessageBoxButtonText}" Command="{Binding MessageBox.MessageBoxButtonCommand}"/>
+                </Grid>
+            </Grid>
+        </Border>
+            
+            
+        </Grid>
+</Window>
