@@ -356,6 +356,7 @@
                                             >
                                             <Image Source="pack://application:,,,/LineStickerDownloader;component/Resources/Images/cloud-download.png"></Image>
                                         </Button>
+                                        
                                     </Grid>
                                 </GroupBox>
                             </StackPanel>
@@ -407,6 +408,7 @@
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
                     <CheckBox
                         Grid.Row="0"
@@ -436,11 +438,20 @@
                         <Label Grid.Column="0" Foreground="White">Gif loopcount</Label>
                         <TextBox Grid.Column="1" Text="{Binding Settings.GifLoopCount}"  Width="100" HorizontalAlignment="Left" Height="20" PreviewTextInput="TextBox_PreviewTextInput"></TextBox>
                     </Grid>
+
+                    <Grid Grid.Row="3" Margin="0 3 0 0" ToolTip="Here you can select the where the collections should be downloaded to.">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" MinWidth="200" Text="{Binding Settings.StickerPath}"></TextBox>
+                        <Button Grid.Column="1" Margin="5 0 0 0" Width="20" Command="{Binding SelectSavePathCommand}">...</Button>
+                    </Grid>
                 </Grid>
 
 
                 <Grid Grid.Row="2">
-                    <Button Margin="10" Height="30" Style="{StaticResource RegularFlatButtonStyleWithSelection}" Background="#424242" HorizontalAlignment="Center" Width="180" Content="OK" Command="{Binding Settings.HideSettingsCommand}"/>
+                    <Button Margin="10" Height="30" Style="{StaticResource RegularFlatButtonStyleWithSelection}" Background="#424242" HorizontalAlignment="Center" Width="180" Content="OK" Command="{Binding Settings.SaveSettingsCommand}"/>
                 </Grid>
             </Grid>
         </Border>

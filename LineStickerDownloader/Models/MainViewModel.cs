@@ -1,9 +1,12 @@
 ﻿using LineStickerDownloader.Commands;
 using LineStickerDownloader.Stickers;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;using System.Threading;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Input;
 
 namespace LineStickerDownloader.Models
@@ -14,6 +17,10 @@ namespace LineStickerDownloader.Models
 
         public ICommand CloseWindow { get; set; }
         public ICommand MinimizeWindow { get; set; }
+        public ICommand SelectSavePathCommand { get; set; }
+        public ICommand ShowSettingsCommand { get; set; }
+        public ICommand DownloadAllCollectionsCommand { get; set; }
+        public ICommand DowenloadCollectionNumber { get; set; }
 
         private WindowState _curWindowState = WindowState.Normal;
         public WindowState CurWindowState
@@ -254,11 +261,6 @@ namespace LineStickerDownloader.Models
         }
 
 
-
-        public ICommand ShowSettingsCommand { get; set; }
-        public ICommand DownloadAllCollectionsCommand { get; set; }
-        public ICommand DowenloadCollectionNumber { get; set; }
-
         public MainViewModel()
         {
 
@@ -278,7 +280,16 @@ namespace LineStickerDownloader.Models
             DownloadAllCollectionsCommand = new RelayCommand(DownloadCollections,(o)=> { return PaginationEnabled; });
             DowenloadCollectionNumber = new RelayCommand(DownloadSpecificCollection, (o) => { return PaginationEnabled; });
             ShowSettingsCommand= new RelayCommand((o) => { Settings.SettingsVisibility = Visibility.Visible; });
-
+            SelectSavePathCommand= new RelayCommand((o) => 
+            {
+                FolderBrowserDialog fbd = new FolderBrowserDialog();
+                fbd.SelectedPath = Settings.StickerPath;
+                DialogResult dr= fbd.ShowDialog();
+                if (dr==DialogResult.OK)
+                {
+                    Settings.StickerPath = Path.Combine(fbd.SelectedPath,"Sticker");
+                }
+            });
 
             MessageBox.OverrideValues(new WPFMessageBox("Retrieving Pagenumbers from Line site", "Please wait, while the page numbers will be received.", "OK", true, true,true));
 

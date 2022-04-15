@@ -18,7 +18,6 @@ namespace LineStickerDownloader
             {
                 _convertAPNG = value;
                 InvokePropertyChanged();
-                SaveSettings();
             }
         }
 
@@ -31,7 +30,6 @@ namespace LineStickerDownloader
             {
                 _saveMainImage = value;
                 InvokePropertyChanged();
-                SaveSettings();
             }
         }
 
@@ -44,7 +42,6 @@ namespace LineStickerDownloader
             {
                 _gifLoopCount = value;
                 InvokePropertyChanged();
-                SaveSettings();
             }
         }
 
@@ -63,9 +60,27 @@ namespace LineStickerDownloader
         }
         
 
-        public string StickerPath { get; set; } = Path.Combine(Helper.GetCurrentPath().FullName, "Sticker");
-        public string CachePath { get; set; } = Path.Combine(Helper.GetCurrentPath().FullName, "Cache");
+        [JsonIgnore]
+        private string _stickerPath = Path.Combine(Helper.GetCurrentPath().FullName,"Sticker");
+        
+        public string StickerPath
+        {
+            get
+            {
+                return _stickerPath;
+            }
+            set
+            {
+                if (!Directory.Exists(value))
+                {
+                    Directory.CreateDirectory(value);
+                }
+                _stickerPath =value;
+                InvokePropertyChanged();
+            }
+        }
 
+        public string CachePath { get; set; } = Path.Combine(Helper.GetCurrentPath().FullName, "Cache");
 
         [JsonIgnore]
         public FileInfo StickerPathFileInfo
@@ -99,7 +114,6 @@ namespace LineStickerDownloader
             }
         }
 
-
         [JsonIgnore]
         private ICommand _hideSettingsCommand;
         [JsonIgnore]
@@ -112,6 +126,8 @@ namespace LineStickerDownloader
                 InvokePropertyChanged();
             }
         }
+
+        public ICommand SaveSettingsCommand { get; set; }
 
         [JsonIgnore]
         private Visibility _settingsVisibility = Visibility.Collapsed;
@@ -137,15 +153,17 @@ namespace LineStickerDownloader
             }
         }
 
-
         [JsonIgnore]
         private FileInfo SettingsPath = new FileInfo(Path.Combine(Helper.GetCurrentPath().FullName, "settings.json"));
-
 
         public Settings()
         {
             HideSettingsCommand = new RelayCommand((o) => {
                 SettingsVisibility = Visibility.Collapsed;
+            });
+            SaveSettingsCommand = new RelayCommand((o) => {
+                SaveSettings();
+                HideSettingsCommand.Execute(null);
             });
         }
 
@@ -157,6 +175,7 @@ namespace LineStickerDownloader
                 this.ConvertAPNG = s.ConvertAPNG;
                 this.GifLoopCount = s.GifLoopCount;
                 this.SaveMainImage = s.SaveMainImage;
+                this._stickerPath = s.StickerPath;
             }
             else
             {

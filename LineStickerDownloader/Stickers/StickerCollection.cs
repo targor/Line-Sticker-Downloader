@@ -299,6 +299,7 @@ namespace LineStickerDownloader.Stickers
                     // save collection image
                     if (MainViewModel.Settings.SaveMainImage)
                      {
+                         if (Image == null) { LoadImage(); }
                          FileInfo mainImage = new FileInfo(CollectionPath.FullName + "\\000AAA_" + this.PackageId + "_main.png");
                          Helper.SaveBitmapImage(Image, mainImage.FullName);
                      }
