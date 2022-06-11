@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -175,12 +176,17 @@ namespace LineStickerDownloader.Stickers
             });
         }
 
+        string StripInvalidCharsFromPathOrFilename(string value)
+        {
+            return Regex.Replace(value, "[^a-zA-Z0-9_]+", "_", RegexOptions.Compiled);
+        }
+
 
         public DirectoryInfo GetCollectionPath()
         {
             if (this.Name!=null && this.Name !="")
             {
-                return new DirectoryInfo(Path.Combine(MainViewModel.Settings.StickerPathFileInfo.FullName, string.Join("_", this.Name.Split(Path.GetInvalidFileNameChars()))));
+                return new DirectoryInfo(Path.Combine(MainViewModel.Settings.StickerPathFileInfo.FullName, StripInvalidCharsFromPathOrFilename(this.Name)));
             }
             return null;
         }
