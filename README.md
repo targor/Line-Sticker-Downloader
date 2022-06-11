@@ -17,6 +17,7 @@ Please note, that the application currently only runs on 64Bit.
 
 - Possibility to resize Stickers of collections
 - Poviding of modified EWESticker version for android
+- Search / Filter for results
 
 # Screenshots
 
