@@ -1,7 +1,7 @@
 # Line-Sticker-Downloader
 Download all available line sticker collections. This program has a GUI, no CLI (only windows, sorry)
 
-Download setup here: https://github.com/targor/Line-Sticker-Downloader/releases/download/v1.0.0/setup.exe
+Download setup here: https://github.com/targor/Line-Sticker-Downloader/releases/download/Release_1.0.2/setup_1_0_2.exe
 Please note, that the application currently only runs on 64Bit.
 
 # Features:
